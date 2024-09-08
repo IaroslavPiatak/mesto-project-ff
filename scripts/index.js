@@ -8,9 +8,10 @@ const listCard = document.querySelector('.places__list');
 function createCard (srcCard, titleCard, removeCardFunction) {
   const cardElement = templateCard.querySelector('.card').cloneNode(true);
   const deleteButtonCard = cardElement.querySelector('.card__delete-button');
+  const cardElementimg = cardElement.querySelector('.card__image');
   deleteButtonCard.addEventListener('click', () => removeCardFunction(cardElement)); 
-  cardElement.querySelector('.card__image').src = srcCard;
-  cardElement.querySelector('.card__image').alt = 'photo';
+  cardElementimg.src = srcCard;
+  cardElementimg.alt = 'photo';
   cardElement.querySelector('.card__title').textContent = titleCard;
   return cardElement;
 

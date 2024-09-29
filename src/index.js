@@ -1,3 +1,6 @@
+import './pages/index.css';
+import {initialCards} from './scripts/cards.js';
+
 // @todo: Темплейт карточки
 const templateCard = document.querySelector("#card-template").content;
 
@@ -27,6 +30,4 @@ initialCards.forEach(function(item) {
   const card = createCard(item.link, item.name, removeCard);
   listCard.append(card);
 });
-
-
 

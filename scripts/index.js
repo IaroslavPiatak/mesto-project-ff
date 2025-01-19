@@ -1,3 +1,4 @@
+// Прочтите README.md 
 // @todo: Темплейт карточки
 const templateCard = document.querySelector("#card-template").content;
 

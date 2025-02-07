@@ -24,13 +24,17 @@ const jobInput = listForms["edit-profile"]["description"];
 jobInput.value = profileDescription.textContent;
 
 // Popups
+const popupsList = document.querySelectorAll('.popup');
+popupsList.forEach((elem)=> {
+  elem.classList.add('popup_is-animated');
+});
 const popupAddCard = document.querySelector(".popup_type_new-card");
 const popupEditProfile = document.querySelector(".popup_type_edit");
 
 buttonEditProfile.addEventListener("click", () => {
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
-  openModal(popupEditProfile);
+  openModal(popupEditProfile);  
 });
 
 // Popups open-close handlers

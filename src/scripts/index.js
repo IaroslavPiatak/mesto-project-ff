@@ -1,5 +1,5 @@
 import '../pages/index.css';
-import { initialCards, createCard } from './cards.js';
+import { initialCards, createCard, deleteCard, handleLike} from './cards.js';
 import { openModal, closeModal } from './modal.js';
 
 // DOM
@@ -79,7 +79,7 @@ function handleAddCardFormSubmit(evt) {
     name: listForms['new-place']['place-name'].value,
     link: listForms['new-place']['link'].value, 
   }
-  listCard.prepend(createCard(dataCard));
+  listCard.prepend(createCard(dataCard, handleLike, deleteCard));
   closeModal(evt.target.closest('.popup'));
   listForms['new-place'].reset();
 }
@@ -88,7 +88,7 @@ listForms['edit-profile'].addEventListener('submit', handleEditProfileFormSubmit
 listForms['new-place'].addEventListener('submit', handleAddCardFormSubmit);
 
 initialCards.forEach((dataCard) => {
-  listCard.append(createCard(dataCard));
+  listCard.append(createCard(dataCard, handleLike, deleteCard));
 });
 
 export { templateCard };

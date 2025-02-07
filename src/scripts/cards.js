@@ -28,7 +28,7 @@ const initialCards = [
   },
 ];
 
-function createCard(dataCard, handleLike, openImgPopup, deleteCard) {
+function createCard(dataCard, handleLike, deleteCard) {
   const cardElement = templateCard.cloneNode(true);
   const cardImg = cardElement.querySelector('.card__image');
   const cardTitle = cardElement.querySelector('.card__title');
@@ -37,33 +37,19 @@ function createCard(dataCard, handleLike, openImgPopup, deleteCard) {
   likeButton.addEventListener('click', handleLike);
 
   deleteButton.addEventListener('click', deleteCard);
-  cardImg.addEventListener('click', () => openImgPopup(cardImg, cardTitle));
   cardImg.src = dataCard.link;
   cardImg.alt = dataCard.name;
   cardTitle.textContent = dataCard.name;
   return cardElement;
 }
 
-function openImgPopup(cardImg, cardTitle) {
-  const popupImg = document.querySelector('.popup__image');
-  const popupCaption = document.querySelector('.popup__caption');
-  popupImg.src = cardImg.src;
-  popupImg.alt = cardTitle.textContent;
-  popupCaption.textContent = cardTitle.textContent;
-  console.log(popupImg);
-  openModal(document.querySelector('.popup_type_image'));
-
+function createContentImgPopup(dataCard, popupImgCard) {
+  const popupImg = popupImgCard.querySelector('.popup__image');
+  const popupCaption = popupImgCard.querySelector('.popup__caption');
+  popupImg.src = dataCard.link;
+  popupImg.alt = dataCard.name;
+  popupCaption.textContent = dataCard.name;
 }
-
-// listCard.addEventListener('click', function (evt) {
-//   if (evt.target.nodeName === 'IMG') {
-//     const cardImg = evt.target;
-//     popupImg.src = cardImg.src;
-//     popupImg.alt = cardImg.alt;
-//     popupCaption.textContent = cardImg.alt;
-//     openModal(popupImgCard);
-//   }
-// });
 
 function handleLike(evt) {
   evt.target.classList.toggle('card__like-button_is-active');
@@ -73,4 +59,10 @@ function deleteCard(evt) {
   evt.target.parentElement.remove();
 }
 
-export { initialCards, createCard, deleteCard, openImgPopup, handleLike };
+export {
+  initialCards,
+  createCard,
+  deleteCard,
+  createContentImgPopup,
+  handleLike,
+};

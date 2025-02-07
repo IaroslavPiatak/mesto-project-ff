@@ -2,34 +2,29 @@ import "../pages/index.css";
 import { initialCards, createCard } from "./cards.js";
 import { openModal, closeModal } from "./modal.js";
 
+// DOM
 const templateCard = document.querySelector("#card-template").content;
 const listCard = document.querySelector(".places__list");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonAddCard = document.querySelector(".profile__add-button");
-
-
-const formElement = document.querySelector(".popup__form");
-// тексты
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
-// инпуты
-const nameInput = formElement.querySelector(".popup__input_type_name");
-nameInput.value = profileName.textContent;
 
-const jobInput = formElement.querySelector(".popup__input_type_description");
+// Forms
+const listForms = document.forms;
+const nameInput = listForms['edit-profile']['name'];
+nameInput.value = profileName.textContent;
+const jobInput = listForms['edit-profile']['description'];
 jobInput.value = profileDescription.textContent;
 
-
-
-
-
-
+// Popups
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupAddCard = document.querySelector(".popup_type_new-card");
 const popupImgCard = document.querySelector(".popup_type_image");
 const popupImg = popupImgCard.querySelector(".popup__image");
 const popupCaption = popupImgCard.querySelector(".popup__caption");
 
+// Popups 
 buttonEditProfile.addEventListener("click", () => {
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
@@ -37,6 +32,7 @@ buttonEditProfile.addEventListener("click", () => {
 
 });
 
+// Popups open-close handlers
 buttonAddCard.addEventListener("click", () => {
   openModal(popupAddCard);
 });
@@ -69,15 +65,15 @@ document.addEventListener("keydown", function (evt) {
 });
 
 
-
-function handleFormSubmit(evt) {
+// Forms handlers
+function handleEditFormSubmit(evt) {
   evt.preventDefault();
-  profileName.textContent = nameInput.value;  // подставляем в имя человека , инпут из формы
-  profileDescription.textContent = jobInput.value; // подсавляем в описание человека, инпут из формы
+  profileName.textContent = nameInput.value;  
+  profileDescription.textContent = jobInput.value; 
   closeModal(evt.target.closest(".popup"));
 }
 
-formElement.addEventListener("submit", handleFormSubmit);
+listForms['edit-profile'].addEventListener("submit", handleEditFormSubmit);
 
 initialCards.forEach((dataCard) => {
   listCard.append(createCard(dataCard));

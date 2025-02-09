@@ -1,10 +1,9 @@
 import "../pages/index.css";
 import { createCard, deleteCard, handleLike } from "./cards.js";
 import { initialCards } from "./initialCards.js";
-import { openModal, closeModal } from "./modal.js";
+import { openModal, closeModal, handleImageClick} from "./modal.js";
 
 // DOM
-const templateCard = document.querySelector("#card-template").content;
 const cardsList = document.querySelector(".places__list");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonAddCard = document.querySelector(".profile__add-button");
@@ -17,15 +16,22 @@ const nameInput = listForms["edit-profile"]["name"];
 const jobInput = listForms["edit-profile"]["description"];
 
 // Popups
+const popupAddCard = document.querySelector(".popup_type_new-card");
+const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupsList = document.querySelectorAll(".popup");
 popupsList.forEach((elem) => {
   elem.classList.add("popup_is-animated");
+  elem.addEventListener("click", function (evt) {
+    const popup = evt.target.closest(".popup");
+    if (
+      evt.target.classList.contains("popup__close") ||
+      evt.target.classList.contains("popup")
+    ) {
+      closeModal(popup);
+    }
+  });
 });
-const popupAddCard = document.querySelector(".popup_type_new-card");
-const popupEditProfile = document.querySelector(".popup_type_edit");
-const popupImgCard = document.querySelector(".popup_type_image");
-const popupImg = popupImgCard.querySelector(".popup__image");
-const popupCaption = popupImgCard.querySelector(".popup__caption");
+
 
 // Popups open-close handlers
 buttonEditProfile.addEventListener("click", () => {
@@ -38,31 +44,6 @@ buttonAddCard.addEventListener("click", () => {
   openModal(popupAddCard);
 });
 
-document.addEventListener("click", function (evt) {
-  const popup = evt.target.closest(".popup");
-  if (
-    evt.target.classList.contains("popup__close") ||
-    evt.target.classList.contains("popup")
-  ) {
-    closeModal(popup);
-  }
-});
-
-function handleImageClick(dataCard) {
-  popupImg.src = dataCard.link;
-  popupImg.alt = dataCard.name;
-  popupCaption.textContent = dataCard.name;
-  openModal(popupImgCard);
-}
-
-function handleEscape(evt) {
-  if (evt.key === "Escape") {
-    const openedPopup = document.querySelector(".popup_is-opened");
-    if (openedPopup) {
-      closeModal(openedPopup);
-    }
-  }
-}
 
 // Forms handlers
 function handleEditProfileFormSubmit(evt) {
@@ -96,5 +77,3 @@ initialCards.forEach((dataCard) => {
     createCard(dataCard, handleLike, handleImageClick, deleteCard)
   );
 });
-
-export { templateCard, listForms, handleImageClick, handleEscape };

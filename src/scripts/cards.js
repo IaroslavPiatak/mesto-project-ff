@@ -1,4 +1,4 @@
-import { templateCard } from "./index.js";
+const templateCard = document.querySelector("#card-template").content;
 
 function createCard(dataCard, handleLike, handleImageClick, deleteCard) {
   const cardElement = templateCard.cloneNode(true);

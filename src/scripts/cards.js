@@ -1,8 +1,9 @@
-import { unlikeCard, likeCard, deleteCard as deleteCrdFromServer } from "./api.js";
+import { unlikeCard, likeCard, getUserInfo, deleteCard as deleteCrdFromServer } from "./api.js";
 
 const templateCard = document.querySelector("#card-template").content;
 
 function createCard(dataCard, handleLike, handleImageClick, handleDeleteCard) {
+
   const cardElement = templateCard.cloneNode(true);
   const cardImg = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
@@ -15,7 +16,7 @@ function createCard(dataCard, handleLike, handleImageClick, handleDeleteCard) {
   cardImg.alt = dataCard.name;
   cardTitle.textContent = dataCard.name;
 
-  likeCounter.textContent = dataCard.likes || 0;
+  likeCounter.textContent = dataCard.likes.length;
 
   // Проверяем, является ли текущий пользователь владельцем карточки
   if (dataCard.ownerId === dataCard.userId) {

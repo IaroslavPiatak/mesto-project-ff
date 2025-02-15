@@ -61,11 +61,12 @@ function promiseInit() {
 function renderCards(cards) {
   cardsList.innerHTML = '';
   cards.forEach(card => {
+    console.log(card);
     const dataCard = {
       id: card._id,
       name: card.name,
       link: card.link,
-      likes: card.likes.length,
+      likes: card.likes,
       ownerId: card.owner._id,
       userId,
     }
@@ -134,7 +135,9 @@ function handleAddCardFormSubmit(evt) {
   const link = listForms["new-place"]["link"].value;
   api.addNewCard(name, link)
     .then((cardData) => {
+      console.log(cardData);
       const newCard = createCard(cardData, handleLike, handleImageClick, deleteCard);
+      
       cardsList.prepend(newCard);
       closeModal(popupAddCard);
       listForms["new-place"].reset();

@@ -3,6 +3,10 @@ import { createCard, deleteCard, handleLike } from "./cards.js";
 import { initialCards } from "./initialCards.js";
 import { openModal, closeModal, handleImageClick} from "./modal.js";
 
+import { validationConfig } from "./validationConfig.js";
+import {enableValidation} from "./validation.js";
+enableValidation(validationConfig);
+
 // DOM
 const cardsList = document.querySelector(".places__list");
 const buttonEditProfile = document.querySelector(".profile__edit-button");

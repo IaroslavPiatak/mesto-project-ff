@@ -1,3 +1,4 @@
+// Навешиваем слушатели на форму и вызваем функцию по навешиванию на инпуты
 function enableValidation(config) {
   const formList = Array.from(document.querySelectorAll(config.formSelector));
 
@@ -14,7 +15,6 @@ function setEventListeners(formElement, config) {
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
 
-  // Первая проверка кнопки на disabled
   toggleButtonState(inputList, buttonElement, config);
 
   inputList.forEach((inputElement) => {
@@ -39,7 +39,7 @@ function toggleButtonState(inputList, buttonElement, config) {
     buttonElement.disabled = false;
   }
 }
-
+// Функции показывающие-отключающие span - ошибку
 function showInputError(formElement, inputElement, errorMessage, config) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(config.inputErrorClass);
@@ -54,6 +54,7 @@ function hideInputError(formElement, inputElement, config) {
   errorElement.textContent = "";
 }
 
+//  Валидация инпута
 function checkInputValidity(formElement, inputElement, config) {
   const errorMessage = inputElement.dataset.error || "Недопустимые символы";
 
@@ -74,7 +75,7 @@ function checkInputValidity(formElement, inputElement, config) {
   }
 }
 
-
+// Очистка ошибок, при закрытиее попапа
 function clearValidation(formElement, config) {
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   inputList.forEach(inputElement => {

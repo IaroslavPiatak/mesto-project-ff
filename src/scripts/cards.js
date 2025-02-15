@@ -1,9 +1,14 @@
-import { unlikeCard, likeCard, getUserInfo, deleteCard as deleteCrdFromServer } from "./api.js";
+import {
+  unlikeCard,
+  likeCard,
+  deleteCard as deleteCrdFromServer,
+} from "./api.js";
 
 const templateCard = document.querySelector("#card-template").content;
 
-function createCard(dataCard, handleLike, handleImageClick, handleDeleteCard) {
+function createCard(cardData, userId, handleLike, handleImageClick) {
 
+  // Формируем карточку
   const cardElement = templateCard.cloneNode(true);
   const cardImg = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
@@ -12,30 +17,39 @@ function createCard(dataCard, handleLike, handleImageClick, handleDeleteCard) {
   const likeCounter = cardElement.querySelector(".card__like-counter");
 
   // Заполняем данные карточки
-  cardImg.src = dataCard.link;
-  cardImg.alt = dataCard.name;
-  cardTitle.textContent = dataCard.name;
+  cardImg.src = cardData.link;
+  cardImg.alt = cardData.name;
+  cardTitle.textContent = cardData.name;
 
-  likeCounter.textContent = dataCard.likes.length;
+  likeCounter.textContent = cardData.likes.length;
 
-  // Проверяем, является ли текущий пользователь владельцем карточки
-  if (dataCard.ownerId === dataCard.userId) {
-    deleteButton.addEventListener("click", (evt) => deleteCard(evt, dataCard.id));
+  // Проверяем, является ли текущий пользователь владельцем карточки и вешаем обработчик удаления
+  if (cardData.owner._id === userId) {
+    deleteButton.addEventListener("click", (evt) =>
+      deleteCard(evt, cardData._id)
+    );
   } else {
     deleteButton.remove();
   }
 
-  // Обработчик лайка
+  // Ищем всех, кто лайкнул карточку, если среди них мы сами - добавить стиль лайку
+  cardData.likes.forEach((likesArr) => {
+    if (likesArr._id === userId)
+      likeButton.classList.toggle("card__like-button_is-active");
+  });
+
+  // Обработчик лайка 
   likeButton.addEventListener("click", (evt) =>
-    handleLike(evt, dataCard.id, likeCounter)
+    handleLike(evt, cardData._id, likeCounter)
   );
 
-  // Обработчик клика по изображению
-  cardImg.addEventListener("click", () => handleImageClick(dataCard));
+  // Обработчик клика по изображению (колбэк)
+  cardImg.addEventListener("click", () => handleImageClick(cardData));
 
   return cardElement;
 }
 
+// колбэк-обработчик лайка
 function handleLike(evt, cardId, likeCounter) {
   const likeButton = evt.target;
   const isLiked = likeButton.classList.contains("card__like-button_is-active");
@@ -61,6 +75,5 @@ function deleteCard(evt, cardId) {
       console.error("Ошибка удаления карточки:", err);
     });
 }
-
 
 export { createCard, deleteCard, handleLike };

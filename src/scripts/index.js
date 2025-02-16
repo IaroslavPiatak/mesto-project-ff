@@ -1,9 +1,9 @@
 // Блок импортов
 import "../pages/index.css";
 import { createCard, handleLike } from "./cards.js";
-import { openModal, closeModal, handleImageClick } from "./modal.js";
+import { openModal, closeModal} from "./modal.js";
 import { validationConfig } from "./validationConfig.js";
-import { enableValidation } from "./validation.js";
+import { clearValidation, enableValidation } from "./validation.js";
 import * as api from "./api.js";
 
 // "Включаем" валидацию
@@ -16,6 +16,9 @@ const buttonAddCard = document.querySelector(".profile__add-button");
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const profileAvatar = document.querySelector(".profile__image");
+const popupImgCard = document.querySelector(".popup_type_image");
+const popupImg = popupImgCard.querySelector(".popup__image");
+const popupCaption = popupImgCard.querySelector(".popup__caption");
 
 // Ищем элементы, связанные с Forms
 const listForms = document.forms;
@@ -42,12 +45,15 @@ popupsList.forEach((elem) => {
 
 // Работаем с API
 
+let userId;
+
 // Запрашиваем id юзера и карточки
 function promiseInit() {
   Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(([userData, cards]) => {
       updateProfileInfo(userData); // сверяем профиль с сервером (имя, описание)
-      renderCards(cards, userData._id); // отрисовываем
+      userId = userData._id;
+      renderCards(cards, userId); // отрисовываем
     })
     .catch(console.error); // вывод ошибки
 }
@@ -74,18 +80,29 @@ promiseInit(); // запускаем адскую машину
 
 // Обработчики открытия-закрытия попапа
 buttonEditProfile.addEventListener("click", () => {
+
+  clearValidation(listForms["edit-profile"], validationConfig);
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
   openModal(popupEditProfile);
 });
 
 buttonAddCard.addEventListener("click", () => {
+  clearValidation(listForms["new-place"], validationConfig);
   openModal(popupAddCard);
 });
 
 profileAvatar.addEventListener("click", () => {
+  clearValidation(listForms["edit-avatar"], validationConfig);
   openModal(popupEditAvatar);
 });
+
+function handleImageClick(dataCard) {
+  popupImg.src = dataCard.link;
+  popupImg.alt = dataCard.name;
+  popupCaption.textContent = dataCard.name;
+  openModal(popupImgCard);
+}
 
 // Обработчики форм
 function handleEditProfileFormSubmit(evt) {
@@ -119,24 +136,17 @@ function handleAddCardFormSubmit(evt) {
 
   const name = listForms["new-place"]["place-name"].value;
   const link = listForms["new-place"]["link"].value;
+  addCard(userId, name, link); 
 
   
-  api
-    .getUserInfo()
-    .then((userData) => {
-      addCard(userData, name, link); // Передаем в addCard
-    })
-    .catch((error) => {
-      console.error("Ошибка при получении данных пользователя:", error);
-    });
 
   // Выносим логику добавления карточки в отдельную функцию
-  function addCard(userData, name, link) {
+  function addCard(userId, name, link) {
     api
       .addNewCard(name, link)
       .then((cardData) => {
         cardsList.prepend(
-          createCard(cardData, userData._id, handleLike, handleImageClick) // Передаем currentUserId
+          createCard(cardData, userId, handleLike, handleImageClick) // Передаем currentUserId
         );
         closeModal(popupAddCard);
         listForms["new-place"].reset();

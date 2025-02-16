@@ -1,12 +1,4 @@
-import {clearValidation} from './validation.js';
-import { validationConfig as config } from './validationConfig';
-
-const popupImgCard = document.querySelector(".popup_type_image");
-const popupImg = popupImgCard.querySelector(".popup__image");
-const popupCaption = popupImgCard.querySelector(".popup__caption");
-
 function openModal(popupElement) {
-  clearValidation(popupElement, config);
   popupElement.classList.add("popup_is-opened"); 
   document.addEventListener("keydown", handleEscape);
 }
@@ -25,13 +17,8 @@ function handleEscape(evt) {
   }
 }
 
-function handleImageClick(dataCard) {
-  popupImg.src = dataCard.link;
-  popupImg.alt = dataCard.name;
-  popupCaption.textContent = dataCard.name;
-  openModal(popupImgCard);
-}
 
 
 
-export { openModal, closeModal, handleImageClick};
+
+export { openModal, closeModal};
